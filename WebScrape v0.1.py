@@ -96,7 +96,7 @@ try:
     captcha_input.send_keys(extracted_captcha_text)
 
 
-    input("Please solve the CAPTCHA and press Enter...")
+    # input("Please solve the CAPTCHA and press Enter...")
 
     # Locate and click the login button
     login_button = driver.find_element(By.XPATH, "//button[@name='submitLogin']")
