@@ -4,7 +4,7 @@ from PIL import Image
 import pytesseract
 import numpy as np
 import cv2
-from background_task import background
+# from background_task import background
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -175,41 +175,41 @@ def fill_booking_form(driver):
 def login(driver):
     captcha_dir = os.path.join(os.getcwd(), "res")
     captcha_image_path = os.path.join(captcha_dir, "captcha_image.jpg")
+
     while True:  # Loop to handle CAPTCHA retries
         try:
+            # Navigate to the login page
             driver.get("https://blsitalypakistan.com/account/login")
-            email_input = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, "//input[@type='text' and @placeholder='Enter Email']"))
-            )
+
+            # Directly interact with the elements without waiting
+            email_input = driver.find_element(By.XPATH, "//input[@type='text' and @placeholder='Enter Email']")
             email_input.send_keys("Waqasali885875867@gmail.com")
+
             password_input = driver.find_element(By.NAME, "login_password")
             password_input.send_keys("Azhar2233")
 
-            extracted_captcha_text = solve_captcha(driver, captcha_image_path)
-            captcha_input = driver.find_element(By.NAME, "captcha_code")
-            captcha_input.clear()  # Clear previous CAPTCHA input
-            captcha_input.send_keys(extracted_captcha_text)
+            # Inform the user to manually solve the CAPTCHA
+            print("Please solve the CAPTCHA in the browser (select images, etc.)...")
 
+            # Wait for the user to solve the CAPTCHA
+            input("Press Enter after solving the CAPTCHA...")
+
+            # Attempt to login after solving CAPTCHA
             login_button = driver.find_element(By.XPATH, "//button[@name='submitLogin']")
             login_button.click()
 
-            # alert = WebDriverWait(driver, 5).until(
-            #     EC.presence_of_element_located((By.CLASS_NAME, "alert-danger"))
-            # )
-            #
-            # if alert :
-            #     print("Captcha Failed .. Retrying ")
-
             # Check if login was successful by inspecting the page content
-            WebDriverWait(driver, 20).until(
-                EC.presence_of_element_located((By.XPATH, "//h3[contains(text(), 'Profile View')]"))
-            )
+            time.sleep(5)  # Give some time for the login process to complete
 
-            print("Login Success")
-            return True
+            # Assuming a successful login redirects you to a dashboard or profile page
+            if "Profile View" in driver.page_source:
+                print("Login Success")
+                return True
+            else:
+                print("Login failed. Retrying...")
 
-        except TimeoutException:
-            print("Timeout while trying to login")
+        except Exception as e:
+            print(f"An error occurred: {e}. Retrying...")
 
 
 # Initialize the WebDriver
