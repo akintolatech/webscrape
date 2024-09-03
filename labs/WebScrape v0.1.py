@@ -47,10 +47,10 @@ def basic_captcha_solver(img_path):
     white_img = cv2.merge([255 - thresh, 255 - thresh, 255 - thresh])
 
     # Output the resulting image
-    cv2.imwrite('res/output_image.jpg', white_img)
+    cv2.imwrite('../res/output_image.jpg', white_img)
 
     # Solve CAPTCHA from output image
-    image = Image.open('res/output_image.jpg')
+    image = Image.open('../res/output_image.jpg')
     captcha_text = pytesseract.image_to_string(image)
 
     return captcha_text.strip()

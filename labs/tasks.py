@@ -37,8 +37,8 @@ def run_bot_automation():
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         _, thresh = cv2.threshold(gray, 50, 255, cv2.THRESH_BINARY_INV)
         white_img = cv2.merge([255 - thresh, 255 - thresh, 255 - thresh])
-        cv2.imwrite('res/output_image.jpg', white_img)
-        image = Image.open('res/output_image.jpg')
+        cv2.imwrite('../res/output_image.jpg', white_img)
+        image = Image.open('../res/output_image.jpg')
         captcha_text = pytesseract.image_to_string(image)
         return captcha_text.strip()
 
