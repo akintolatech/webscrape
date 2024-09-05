@@ -79,7 +79,9 @@ def fill_booking_form(driver):
     for attempt in range(max_retries):
         try:
             # Navigate to Booking Appointment Link
-            driver.get("https://blsitalypakistan.com/bls_appmnt/bls-italy-appointment")
+            driver.get("https://blsitalypakistan.com/bls_appmnt/bls-italy-appointment/MWRVRnJlMTgwNjczMDc5NjI/NjlPc1J2bzI0OTcyOTM4MzU2/MXNBUGFXMzA5NDE3MzYyMDU")
+            # driver.get("https://blsitalypakistan.com/bls_appmnt/bls-italy-appointment")
+
 
             # Wait for the Appointment Form to pop up
             WebDriverWait(driver, 10).until(
