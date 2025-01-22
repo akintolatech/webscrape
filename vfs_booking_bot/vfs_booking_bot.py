@@ -8,13 +8,12 @@ from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from random import uniform
+from credentials import email, password
 
 import seleniumbase
 from seleniumbase import SB
 
 access_link = "https://visa.vfsglobal.com/qat/en/prt/login"
-email = "qatrtarikprt01@mailsac.com"
-password = "@T147852a#@"
 
 URLS_DICT = {
     "Thailand": "https://visa.vfsglobal.com/tha/en/ltp/login",
