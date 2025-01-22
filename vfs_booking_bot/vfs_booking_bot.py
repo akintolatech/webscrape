@@ -7,22 +7,22 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 import time
+from random import uniform
 
 import seleniumbase
 from seleniumbase import SB
-
-
 
 access_link = "https://visa.vfsglobal.com/qat/en/prt/login"
 email = "qatrtarikprt01@mailsac.com"
 password = "@T147852a#@"
 
 URLS_DICT = {
-        "Thailand": "https://visa.vfsglobal.com/tha/en/ltp/login",
-             "Dubai": "https://visa.vfsglobal.com/are/en/ltp/login",
-             "Malaysia": "https://visa.vfsglobal.com/mys/en/ltp/login",
-             "Baku": "https://visa.vfsglobal.com/aze/en/ltp/login"
+    "Thailand": "https://visa.vfsglobal.com/tha/en/ltp/login",
+    "Dubai": "https://visa.vfsglobal.com/are/en/ltp/login",
+    "Malaysia": "https://visa.vfsglobal.com/mys/en/ltp/login",
+    "Baku": "https://visa.vfsglobal.com/aze/en/ltp/login"
 }
+
 
 def fill_booking_form(driver):
     captcha_dir = os.path.join(os.getcwd(), "res")
@@ -130,8 +130,7 @@ def fill_booking_form(driver):
     return False
 
 
-
-def WaitForLoadingToComplete(driver : seleniumbase.BaseCase):
+def WaitForLoadingToComplete(driver: seleniumbase.BaseCase):
     loading_path = '//div[@class="ngx-overlay loading-foreground"]'
     i = 1
     while True:
@@ -144,160 +143,163 @@ def WaitForLoadingToComplete(driver : seleniumbase.BaseCase):
             print("Loading Completed")
             break
 
-# def login(driver):
-#
-#     while True:  # Loop to handle CAPTCHA retries
-#         try:
-#
-#             # Navigate to the login page
-#             driver.get(access_link)
-#
-#             # Accepting all cookies
-#             acceptcookies_xpath = '//button[@id="onetrust-accept-btn-handler"]'
-#
-#             # Wait for the cookie button to be visible and click it
-#             WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, acceptcookies_xpath))).click()
-#             time.sleep(0.5)
-#
-#             # Getting and updating latest cookies
-#             cookies = driver.get_cookies()
-#             for cookie in cookies:
-#                 driver.add_cookie(cookie)
-#
-#             time.sleep(5)
-#
-#             # Wait until the email input field is present
-#             email_input = WebDriverWait(driver, 10).until(
-#                 EC.presence_of_element_located(
-#                     (By.XPATH, "//input[@type='text' and @placeholder='jane.doe@email.com']"))
-#             )
-#             email_input.send_keys(email)
-#
-#             # Wait until the password input field is present
-#             password_input = WebDriverWait(driver, 10).until(
-#                 EC.presence_of_element_located((By.XPATH, "//input[@type='text' and @placeholder='** ** ** ** **']"))
-#             )
-#             password_input.send_keys(password)
-#
-#             # Inform the user to manually solve the CAPTCHA
-#             print("Please solve the CAPTCHA in the browser (select images, etc.)...")
-#
-#
-#             # Wait until the button is present in the DOM
-#             button = WebDriverWait(driver, 10).until(
-#                 EC.presence_of_element_located((By.XPATH, "//button[contains(., 'Sign In')]"))
-#             )
-#
-#             # Enable the button using JavaScript if it's disabled
-#             driver.execute_script("arguments[0].removeAttribute('disabled')", button)
-#
-#             # Click the button
-#             button.click()
-#
-#             # Check if login was successful by inspecting the page content
-#             time.sleep(5)  # Give some time for the login process to complete
-#
-#             # Assuming a successful login redirects you to a dashboard or profile page
-#             if "Profile View" in driver.page_source:
-#                 print("Login Success")
-#                 return True
-#             else:
-#                 print("Login failed. Retrying...")
-#
-#         except Exception as e:
-#             print(f"An error occurred: {e}. Retrying...")
+def login(driver):
+    try:
+        print(f"User Agent: '{driver.execute_script('return navigator.userAgent;')}'")
+        driver.maximize_window()
+        driver.get(access_link)
 
-
-def login(selenium_driver):
-    # URL = "https://visa.vfsglobal.com/are/en/ltp/login"
-    URL = access_link
-    with SB(uc=True, test = True, incognito = True) as driver:
-        driver : seleniumbase.BaseCase
-
-        #-------------------- LOGGING SECTION STARTED!! : 0 --------------------
+        # Accept cookies
         try:
-            # Initializing VFS Global website
-            print(f"User Agent: '{driver.get_user_agent()}'")
-            driver.maximize_window()
-            driver.uc_open_with_reconnect(URL, 25)
-
-            # Accepting all cookies in VFS Global website
             acceptcookies_xpath = '//button[@id="onetrust-accept-btn-handler"]'
-            WaitForLoadingToComplete(driver)
-            driver.click(acceptcookies_xpath,timeout=20)
-            driver.sleep(0.5)
+            driver.find_element(By.XPATH, acceptcookies_xpath).click()
+            print("Accepted cookies.")
+            time.sleep(0.5)
+        except Exception as e:
+            print(f"Cookies button not found: {e}")
 
-            # Getting and updating latest cookies to avoid getting spam/blocked
-            driver.get_cookies()
-            cook = driver.get_cookies()
-            driver.add_cookies(cook)
+        # Fill in credentials
+        driver.find_element(By.ID, 'email').send_keys(email)
+        time.sleep(0.5)
+        driver.find_element(By.ID, 'password').send_keys(password)
+        time.sleep(0.5)
 
-        except Exception as error:
-            print(f"Fail to login due to unexpected issue -> '{error}'")
-            # messagebox.showerror("Login Issue", message= 'Fail to login due to unexpected issue!')
+        # Handle captcha manually (or implement automation here)
+        print("Handle Captcha manually if required...")
 
-        # Wait until the email input field is present
-                    email_input = WebDriverWait(driver, 10).until(
-                        EC.presence_of_element_located(
-                            (By.XPATH, "//input[@type='text' and @placeholder='jane.doe@email.com']"))
-                    )
-                    email_input.send_keys(email)
-
-                    # Wait until the password input field is present
-                    password_input = WebDriverWait(driver, 10).until(
-                        EC.presence_of_element_located((By.XPATH, "//input[@type='text' and @placeholder='** ** ** ** **']"))
-                    )
-                    password_input.send_keys(password)
-        Handling captcha (if not solved automatically)
-        print("Handling Captcha")
-        driver.uc_gui_handle_captcha()
-
-        #Logging in!
+        # Submit login form
         submitbutton_xpath = "//button[contains(@class,'mat-btn-lg')]"
-        signin_button = driver.find_element(By.XPATH,submitbutton_xpath)
-        signin_button.click()
-        WaitForLoadingToComplete(driver)
-        print("Clicked Sign In!!!")
-        #-------------------- LOGGING SECTION ENDED!!: 0 --------------------
+        driver.find_element(By.XPATH, submitbutton_xpath).click()
+        time.sleep(5)  # Wait for login process
 
-        #-------------------- POST LOGIN SECTION STARTED!!: 1 --------------------
-        newbooking_xpath = "//span[contains(.,'Start New Booking')]/parent::button[contains(@class,'d-lg-inline-block')]"
+        print("Login successful.")
 
+        # Check if login is successful
+        if "dashboard" in driver.current_url:
+            return True
+        else:
+            return False
 
-# Initialize the WebDriver
+    except Exception as error:
+        print(f"Login failed: {error}")
+        return False
+
 def run_bot_automation():
-    # # Launch Chrome in undetected mode
-    # # chrome_options = webdriver.ChromeOptions()
-    # chrome_options = uc.ChromeOptions()
-    # chrome_options.add_argument("--start-maximized")
-    # chrome_options.add_argument("--incognito")
-    # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
-
-    # Launch Chrome in undetected mode
     options = uc.ChromeOptions()
-    options.add_argument("--start-maximized")  # Maximize window
-    options.add_argument("--incognito")  # Run browser in incognito mode
-    options.add_argument("--disable-blink-features=AutomationControlled")  # Hide automation
-    options.add_argument("--disable-popup-blocking")  # Allow popups
-    options.add_argument("--no-first-run --no-service-autorun --password-store=basic")  # Optimize performance
+    options.add_argument("--start-maximized")
+    options.add_argument("--incognito")
+    options.add_argument("--disable-blink-features=AutomationControlled")
 
-    # Initialize undetected Chrome driver
     driver = uc.Chrome(options=options, use_subprocess=True)
-
-
-    max_retries = 10  # Number of retries if login fails
+    max_retries = 5
 
     for _ in range(max_retries):
-        login()
-        # if login(driver):
-        #     # After successful login fill booking form
-        #     # fill_booking_form(driver)
-        #     break
-        # else:
-        #     # Wait before retrying
-        #     time.sleep(5)
+        if login(driver):
+            print("Proceeding to next step...")
+            break
+        else:
+            print("Retrying login...")
+            time.sleep(5)
 
     driver.quit()
+
+# Run the automation
+run_bot_automation()
+
+# def login():
+#     # URL = "https://visa.vfsglobal.com/are/en/ltp/login"
+#     URL = access_link
+#     with SB(uc=True, test=True, incognito=True) as driver:
+#         driver: seleniumbase.BaseCase
+#
+#         # -------------------- LOGGING SECTION STARTED!! : 0 --------------------
+#         try:
+#             # Initializing VFS Global website
+#             print(f"User Agent: '{driver.get_user_agent()}'")
+#             driver.maximize_window()
+#             driver.uc_open_with_reconnect(URL, 25)
+#
+#             # Accepting all cookies in VFS Global website
+#             acceptcookies_xpath = '//button[@id="onetrust-accept-btn-handler"]'
+#             WaitForLoadingToComplete(driver)
+#             driver.click(acceptcookies_xpath, timeout=20)
+#             print("Accepted cookies ....................................... OK")
+#             driver.sleep(0.5)
+#
+#             # Getting and updating latest cookies to avoid getting spam/blocked
+#             driver.get_cookies()
+#             cook = driver.get_cookies()
+#             driver.add_cookies(cook)
+#
+#         except Exception as error:
+#             print(f"Fail to login due to unexpected issue -> '{error}'")
+#             # messagebox.showerror("Login Issue", message= 'Fail to login due to unexpected issue!')
+#
+#         # Filling the email
+#         print("Filling Username")
+#         email_input = driver.find_element(By.ID, 'email')
+#         # for email_key in EMAIL:
+#         email_input.send_keys(email)
+#         time.sleep(uniform(0, 0.5))
+#
+#         # Filling the password
+#         print("Filling Password")
+#         password_input = driver.find_element(By.ID, 'password')
+#         # for pass_key in PASSWORD:
+#         password_input.send_keys(password)
+#         time.sleep(uniform(0, 0.5))
+#
+#         # Handling captcha (if not solved automatically)
+#         print("Handling Captcha")
+#         driver.uc_gui_handle_captcha()
+#
+#         # Logging in!
+#         submitbutton_xpath = "//button[contains(@class,'mat-btn-lg')]"
+#         signin_button = driver.find_element(By.XPATH, submitbutton_xpath)
+#         signin_button.click()
+#         WaitForLoadingToComplete(driver)
+#         print("Clicked Sign In!!!")
+#         # -------------------- LOGGING SECTION ENDED!!: 0 --------------------
+#
+#         # -------------------- POST LOGIN SECTION STARTED!!: 1 --------------------
+#         newbooking_xpath = "//span[contains(.,'Start New Booking')]/parent::button[contains(@class,'d-lg-inline-block')]"
+#         print("Login successful.................")
+#
+#
+# # Initialize the WebDriver in a seleniumbase undetected mode
+# def run_bot_automation():
+#     # # Launch Chrome in undetected mode
+#     # # chrome_options = webdriver.ChromeOptions()
+#     # chrome_options = uc.ChromeOptions()
+#     # chrome_options.add_argument("--start-maximized")
+#     # chrome_options.add_argument("--incognito")
+#     # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+#
+#     # Launch Chrome in undetected mode
+#     options = uc.ChromeOptions()
+#     options.add_argument("--start-maximized")  # Maximize window
+#     options.add_argument("--incognito")  # Run browser in incognito mode
+#     options.add_argument("--disable-blink-features=AutomationControlled")  # Hide automation
+#     options.add_argument("--disable-popup-blocking")  # Allow popups
+#     options.add_argument("--no-first-run --no-service-autorun --password-store=basic")  # Optimize performance
+#
+#     # Initialize undetected Chrome driver
+#
+#     driver = uc.Chrome(options=options, use_subprocess=True)
+#
+#     max_retries = 10  # Number of retries if login fails
+#
+#     for _ in range(max_retries):
+#         login()
+#         # if login(driver):
+#         #     # After successful login fill booking form
+#         #     # fill_booking_form(driver)
+#         #     break
+#         # else:
+#         #     # Wait before retrying
+#         #     time.sleep(5)
+#
+#     driver.quit()
 
 
 # Run the automation
