@@ -8,7 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from random import uniform
-from credentials import email, password
+from credentials import acc
 
 import seleniumbase
 from seleniumbase import SB
@@ -100,6 +100,8 @@ def login_and_initialize_bot():
         wait_for_loading_to_complete(driver)
         print("Clicked Sign In!!!")
         time.sleep(10)
+        return True
+
 
         #-------------------- LOGGING SECTION ENDED!!: 0 --------------------
 
