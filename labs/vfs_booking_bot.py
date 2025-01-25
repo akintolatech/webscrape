@@ -100,61 +100,20 @@ def login_and_initialize_bot():
         wait_for_loading_to_complete(driver)
         print("Clicked Sign In!!!")
         time.sleep(10)
-        return True
-
 
         #-------------------- LOGGING SECTION ENDED!!: 0 --------------------
 
-        # #-------------------- POST LOGIN SECTION STARTED!!: 1 --------------------
-        # newbooking_xpath = "//span[contains(.,'Start New Booking')]/parent::button[contains(@class,'d-lg-inline-block')]"
-        # try:
-        #     wait_for_loading_to_complete(driver)
-        #     driver.wait_for_element_clickable(newbooking_xpath)
-        #     print("Login Successful!")
-        #     # book_appointment(driver = driver,client_details = client_details)
-        # except Exception as error:
-        #     print(f"Fail to login due to unexpected issue -> '{error}'")
-        #     # messagebox.showerror("Login Issue", message= 'Fail to login due to unexpected issue!')
-
-
-def login(driver):
-    captcha_dir = os.path.join(os.getcwd(), "res")
-    captcha_image_path = os.path.join(captcha_dir, "captcha_image.jpg")
-
-    while True:  # Loop to handle CAPTCHA retries
+        #-------------------- POST LOGIN SECTION STARTED!!: 1 --------------------
+        newbooking_xpath = "//span[contains(.,'Start New Booking')]/parent::button[contains(@class,'btn-brand-orange')]"
         try:
-            # Navigate to the login page
-            driver.get("https://blsitalypakistan.com/account/login")
+            wait_for_loading_to_complete(driver)
+            driver.wait_for_element_clickable(newbooking_xpath)
+            return True
+        except Exception as error:
+            print(f"Fail to login due to unexpected issue -> '{error}'")
+            return False
 
-            # Directly interact with the elements without waiting
-            email_input = driver.find_element(By.XPATH, "//input[@type='text' and @placeholder='Enter Email']")
-            email_input.send_keys("Waqasali885875867@gmail.com")
 
-            password_input = driver.find_element(By.NAME, "login_password")
-            password_input.send_keys("Azhar2233")
-
-            # Inform the user to manually solve the CAPTCHA
-            print("Please solve the CAPTCHA in the browser (select images, etc.)...")
-
-            # Wait for the user to solve the CAPTCHA
-            input("Press Enter after solving the CAPTCHA...")
-
-            # Attempt to login after solving CAPTCHA
-            login_button = driver.find_element(By.XPATH, "//button[@name='submitLogin']")
-            login_button.click()
-
-            # Check if login was successful by inspecting the page content
-            time.sleep(5)  # Give some time for the login process to complete
-
-            # Assuming a successful login redirects you to a dashboard or profile page
-            if "Profile View" in driver.page_source:
-                print("Login Success")
-                return True
-            else:
-                print("Login failed. Retrying...")
-
-        except Exception as e:
-            print(f"An error occurred: {e}. Retrying...")
 
 
 # Initialize the WebDriver
