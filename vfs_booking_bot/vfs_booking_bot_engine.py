@@ -65,17 +65,17 @@ def login(driver, url, email, password):
     try:
         # driver.open(url)
         driver.uc_open_with_reconnect(url, 25)
-        # driver.maximize_window()
-        # Set window position and size to dock it to the side
-        driver.set_window_position(100, 100)  # x, y coordinates
-        driver.set_window_size(800, 600)  # width, height
+        # # driver.maximize_window()
+        # # Set window position and size to dock it to the side
+        # driver.set_window_position(100, 100)  # x, y coordinates
+        # driver.set_window_size(800, 600)  # width, height
 
 
 
         # Accepting all cookies in VFS Global website
         acceptcookies_xpath = '//button[@id="onetrust-accept-btn-handler"]'
         wait_for_loading_to_complete(driver)
-        driver.click(acceptcookies_xpath, timeout=20)
+        driver.click(acceptcookies_xpath, timeout=5)
         driver.sleep(0.5)
 
         # Getting and updating latest cookies to avoid getting spam/blocked
@@ -103,7 +103,7 @@ def login(driver, url, email, password):
         driver.click(submitbutton_xpath)
 
         # Wait for login to complete
-        time.sleep(10)
+        wait_for_loading_to_complete(driver)
 
         return True
 
